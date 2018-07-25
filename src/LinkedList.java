@@ -59,4 +59,84 @@ public class LinkedList {
 		
 		
 	}
+	
+	public boolean contains(int value) {
+		Node current = head;
+		while (current != null) {
+			if (current.value == value) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	public int getByIndex(int index) {
+		if (index < 0) {
+			throw new IndexOutOfBoundsException();
+		} else {
+			Node current = head;
+			for (int i = 0; i < index; i++) {
+				if (current == null || current.next == null) {
+					throw new IndexOutOfBoundsException();
+				}
+				current = current.next;
+			}
+			return current.value;
+		}
+	}
+	
+	public void removeFromFront() {
+		if (!isListEmpty()) {
+			head = head.next;
+		} 
+		if (isListEmpty()) {
+			tail = null;
+		}
+	}
+	
+	public void removeFromBack() {
+		if (isListEmpty()) {
+			//Linked list is empty
+			return;
+		} else if (head == tail) { //the variables points to the same object
+			//Linked list has only one element
+			head = null;
+			tail = null;
+
+		} else {
+			Node current = head;
+			while (current.next != tail) {
+				current = current.next;
+			}
+			tail = current;
+			tail.next = null;
+		}
+	}
+	
+	public void removeAtIndex(int index) {
+		if (index < 0) {
+			throw new IndexOutOfBoundsException();
+		} else if (index == 0) {
+			removeFromFront();
+		}
+		Node current = head;
+		for (int i = 0; i < index - 1; i++) {
+			if (current == null) {
+				throw new IndexOutOfBoundsException();
+			}
+			current = current.next;
+		}
+		current.next = current.next.next;
+		if (current.next == null) {
+			tail = current;
+		}
+	}
+	
+	public boolean isListEmpty() {
+		if (head == null) {
+			return true;
+		} else {
+			return false;
+		}
+	}
 }
