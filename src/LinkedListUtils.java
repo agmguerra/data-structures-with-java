@@ -1,6 +1,5 @@
 
 
-import java.util.Iterator;
 import java.util.LinkedList;
 
 /*
@@ -36,6 +35,17 @@ public class LinkedListUtils {
 	}
 	
 
+	private static String getMaxString(LinkedList<String> list) {
+		String max = "";
+		for (String val : list) {
+			if (val.compareTo(max) > 0) {
+				max = val;
+			}
+		}
+		return max;
+	}
+	
+	
 	public static void removeMaximumValues(LinkedList<String> list, int N) {
 
 		if (list == null || N < 0) {
@@ -43,22 +53,37 @@ public class LinkedListUtils {
 		}
 		if (N >= list.size()) {
 			list.clear();
-		}
-		LinkedList<String> removedsList = new LinkedList<String>();
-		String maxStr = "";
-		for (String str : list) {
-			int res = maxStr.compareTo(str);
-			if (res == 1) {
-				
+		} else {
+			int faltaRemover = N;
+			while (faltaRemover > 0) {
+				final String str = getMaxString(list);
+				list.removeIf(s -> s.equals(str));
+				faltaRemover--;
 			}
 		}
-		
-
 	}
 	
 	public static boolean containsSubsequence(LinkedList<Integer> one, LinkedList<Integer> two) {
 
-		/* IMPLEMENT THIS METHOD! */
+		if (one == null || one.isEmpty()) {
+			return false;
+		}
+		if (two == null || two.isEmpty()) {
+			return false;
+		}
+		if (two.size() > one.size()) {
+			return false;
+		}
+		
+		for (int i = 0; i < (one.size() - i + 1); i++) {
+			boolean ret = false;
+			for(int j = i; j < two.size() - 1; j++) {
+				
+				if (one.get(j) != two.get(j)) {
+					return false;
+				}
+			}
+		}
 		
 		return true; // this line is here only so this code will compile if you don't modify it
 	}
