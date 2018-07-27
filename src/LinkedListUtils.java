@@ -75,16 +75,25 @@ public class LinkedListUtils {
 			return false;
 		}
 		
-		for (int i = 0; i < (one.size() - i + 1); i++) {
-			boolean ret = false;
-			for(int j = i; j < two.size() - 1; j++) {
-				
-				if (one.get(j) != two.get(j)) {
-					return false;
+		boolean ret = false;
+		int i = 0;
+		int val = one.size() - two.size() + 1;
+		while (i < val) {
+			ret = true;
+			int y = 0;
+			for(int j = i; j < i + two.size(); j++) {
+				if (one.get(j) != two.get(y)) {
+					ret = false;
+					break;
 				}
+				y++;
 			}
+			if (ret) {
+				break;
+			}
+			i++;
 		}
 		
-		return true; // this line is here only so this code will compile if you don't modify it
+		return ret; // this line is here only so this code will compile if you don't modify it
 	}
 }
