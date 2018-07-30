@@ -23,6 +23,11 @@ public class HtmlValidator {
 				tag = tags.remove();
 				if (tag.isOpenTag() && !tag.isSelfClosing()) {
 					htmlElements.push(tag);
+				} if (tag.isSelfClosing()) {
+					continue;
+				} else if (tag.getElement().equals("<!doctype>") ||
+						tag.getElement().equals("<!-- -->")) {
+						continue;
 				} else {
 					if (!htmlElements.isEmpty()) {
 						HtmlTag ret = htmlElements.pop();
@@ -31,10 +36,10 @@ public class HtmlValidator {
 							break;
 						}
 					} else {
-						if (!tag.isSelfClosing()) {
+						if (tag.isSelfClosing()) {
 							htmlElements = null;
+							break;
 						}
-						break;
 					} 
 				}
 			} while (!tags.isEmpty());
