@@ -8,7 +8,7 @@ import java.util.Stack;
  */
 
 public class HtmlValidator {
-	
+		
 	public static Stack<HtmlTag> isValidHtml(Queue<HtmlTag> tags) {
 
 		Stack<HtmlTag> htmlElements = null;
@@ -18,34 +18,50 @@ public class HtmlValidator {
 			
 			htmlElements = new Stack<HtmlTag>();
 			
-			HtmlTag tag = null; 
-			do { 
-				tag = tags.remove();
-				if (tag.isOpenTag() && !tag.isSelfClosing()) {
+			boolean end = false;
+			
+			HtmlTag tag = tags.remove();
+			while (!end) { 
+				if (tag.isOpenTag()) {
 					htmlElements.push(tag);
-				} if (tag.isSelfClosing()) {
-					continue;
-				} else if (tag.getElement().equals("<!doctype>") ||
-						tag.getElement().equals("<!-- -->")) {
-						continue;
 				} else {
-					if (!htmlElements.isEmpty()) {
-						HtmlTag ret = htmlElements.pop();
-						if (!tag.matches(ret)) {
-							htmlElements.push(ret);
-							break;
-						}
-					} else {
-						if (tag.isSelfClosing()) {
+					if (!tag.isSelfClosing()) {
+						if (!htmlElements.isEmpty()) {
+							HtmlTag ret = htmlElements.pop();
+							if (!tag.matches(ret)) {
+								htmlElements.push(ret);
+								break;
+							}
+						} else {
 							htmlElements = null;
 							break;
-						}
-					} 
+						} 
+					}
 				}
-			} while (!tags.isEmpty());
+				
+				if (tags.isEmpty()) {
+					end = true;
+				} else {
+					tag = tags.remove();					
+				} 		
+
+			};
 		
 		}
 		return htmlElements; 
 	}
+	
+	
+//	public static void main(String[] args) {
+//		try {
+//			Queue<HtmlTag> tags = HtmlReader.getTagsFromHtmlFile("test6.html");
+//			
+//			System.out.println(HtmlValidator.isValidHtml(tags));
+//			
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//		}
+//		
+//	}
 }
 
