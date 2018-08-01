@@ -6,6 +6,7 @@ public class HashSet {
 	
 	private LinkedList<String>[] buckets;
 	
+	@SuppressWarnings("unchecked")
 	public HashSet(int size) {
 		this.buckets = new LinkedList[size];
 		for (int i = 0; i < size; i++) {
@@ -18,9 +19,10 @@ public class HashSet {
 	}
 	
 	public boolean add(String value) {
-		int index = hashCode(value) % value.length();
-		if (buckets[index] == null) {
-			//buckets[index] = value;
+		if (!contains(value)) {
+			int index = hashCode(value) & buckets.length;
+			LinkedList<String> bucket = buckets[index];
+			bucket.addFirst(value);
 			return true;
 		}
 		return false;
@@ -28,7 +30,8 @@ public class HashSet {
 	
 	public boolean contains(String value) {
 		int index = hashCode(value) + value.length();
-		return value.equals(buckets[index]);
+		LinkedList<String> bucket = buckets[index];
+		return bucket.contains(value);
 	}
 
 }
