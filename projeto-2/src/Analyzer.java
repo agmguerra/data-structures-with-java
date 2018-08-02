@@ -1,3 +1,6 @@
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
@@ -15,12 +18,34 @@ public class Analyzer {
 	 */
 	public static List<Sentence> readFile(String filename) {
 
-		/* IMPLEMENT THIS METHOD! */
+		List<Sentence> list = new ArrayList<Sentence>();
 		
-		return null; // this line is here only so this code will compile if you don't modify it
+		try (BufferedReader br = new BufferedReader(new FileReader(filename))) {
+		    String line;
+		    while ((line = br.readLine()) != null) {
+		       Sentence set = parseLine(line);
+		       if (set != null) {
+		    	   list.add(set);
+		       }
+		    }
+		} catch (Exception e) {
+			list = new ArrayList<Sentence>();
+		}	
+		return list; 
 
 	}
 	
+	private static Sentence parseLine(String line) {
+		if (!line.matches("^(0|1|2|-1|-2)\\s{1}.+")) {
+			return null;
+		} else {
+			int score = Integer.parseInt(line.substring(0, line.indexOf(" ")));
+			String text = line.substring( line.indexOf(" ") + 1);
+			return new Sentence(score, text);
+		}
+		
+	}
+
 	/*
 	 * Implement this method in Part 2
 	 */
@@ -73,5 +98,6 @@ public class Analyzer {
 		Map<String, Double> wordScores = Analyzer.calculateScores(words);
 		double score = Analyzer.calculateSentenceScore(wordScores, sentence);
 		System.out.println("The sentiment score is " + score);
+		
 	}
 }
