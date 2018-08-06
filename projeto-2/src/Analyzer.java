@@ -1,6 +1,8 @@
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
@@ -46,14 +48,40 @@ public class Analyzer {
 		
 	}
 
+	
+	private static void parseSentence(Sentence sentence, Map<String, Word> words) {
+		String[] textParts = sentence.getText().split("\\{1}");
+		for (String part : textParts) {
+			if (part.matches("^[a-zA-Z]"))
+			if (words.containsKey(part)) {
+				Word word = words.get(part);
+				word.increaseTotal(sentence.getScore());
+				
+			} else {
+				Word word = new Word(part);
+				word.increaseTotal(sentence.getScore());
+				words.put(word.getText(), word);
+			}
+		}
+
+	}
+	
 	/*
 	 * Implement this method in Part 2
 	 */
 	public static Set<Word> allWords(List<Sentence> sentences) {
-
-		/* IMPLEMENT THIS METHOD! */
 		
-		return null; // this line is here only so this code will compile if you don't modify it
+		Map<String, Word> words = new HashMap<String, Word>();
+		if (sentences != null && !sentences.isEmpty() ) {
+			for (Sentence sentence : sentences) {
+				if (sentence != null && sentence.getText() != null) {
+					parseSentence(sentence, words);
+				}
+			}
+		}
+
+		Set<Word> allWords = new HashSet<Word>(words.values());
+		return allWords;
 
 	}
 	
