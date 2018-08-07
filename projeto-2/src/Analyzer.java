@@ -49,26 +49,53 @@ public class Analyzer {
 	}
 
 	
-	private static void parseSentence(Sentence sentence, Map<String, Word> words) {
-		String[] textParts = sentence.getText().split("\\{1}");
-		for (String part : textParts) {
-			if (part.matches("^[a-zA-Z]"))
-			if (words.containsKey(part)) {
-				Word word = words.get(part);
-				word.increaseTotal(sentence.getScore());
-				
-			} else {
-				Word word = new Word(part);
-				word.increaseTotal(sentence.getScore());
-				words.put(word.getText(), word);
+	private static List<String> splitSentenceIntoWords(String sentence) {
+		
+		List<String> sentenceParsed = new ArrayList<String>();
+		if (sentence != null && !sentence.isEmpty()) {
+			String[] textParts = sentence.split("\\s{1}");
+			for (String part : textParts) {
+				int j = part.indexOf("'");
+				if (!part.startsWith("'") && j > 0) {
+					part = part.substring(0, j + 1);
+				}
+				part = part.toLowerCase();
+				if (part.matches("[a-z]+")) {
+					sentenceParsed.add(part);
+				}
 			}
+		}
+		
+		return sentenceParsed;
+	}
+	
+	
+	private static void parseSentence(Sentence sentence, Map<String, Word> words) {
+		String[] textParts = sentence.getText().split("\\s{1}");
+		for (String part : textParts) {
+			
+
+			List<String> validWordsFromSentence = splitSentenceIntoWords(part);
+			if (!validWordsFromSentence.isEmpty()) {
+				for (String sentencePart : validWordsFromSentence) {
+					
+		
+				if (words.containsKey(sentencePart)) {
+					Word word = words.get(sentencePart);
+					word.increaseTotal(sentence.getScore());
+					
+				} else {
+					Word word = new Word(sentencePart);
+					word.increaseTotal(sentence.getScore());
+					words.put(word.getText(), word);
+				}
+				}
+			}
+			
 		}
 
 	}
 	
-	/*
-	 * Implement this method in Part 2
-	 */
 	public static Set<Word> allWords(List<Sentence> sentences) {
 		
 		Map<String, Word> words = new HashMap<String, Word>();
@@ -85,25 +112,40 @@ public class Analyzer {
 
 	}
 	
-	/*
-	 * Implement this method in Part 3
-	 */
 	public static Map<String, Double> calculateScores(Set<Word> words) {
 
-		/* IMPLEMENT THIS METHOD! */
+		Map<String, Double> wordScoreContainer = new HashMap<String, Double>();
+		if (words != null && !words.isEmpty()) {
+
+			for (Word word : words) {
+				if (word != null) {
+					wordScoreContainer.put(word.getText(), word.calculateScore());
+				}
+			}
+		}
 		
-		return null; // this line is here only so this code will compile if you don't modify it
+		return wordScoreContainer;
 
 	}
 	
-	/*
-	 * Implement this method in Part 4
-	 */
 	public static double calculateSentenceScore(Map<String, Double> wordScores, String sentence) {
 
-		/* IMPLEMENT THIS METHOD! */
+		List<String> sentenceParsed = splitSentenceIntoWords(sentence);
+		int count = 0;
+		double averageScore = 0.0;
+		if (wordScores != null && !wordScores.isEmpty() && !sentenceParsed.isEmpty()) {
+			for (String part: sentenceParsed) {
+				if (wordScores.containsKey(part)) {
+					averageScore += wordScores.get(part);
+				} 
+				count++;
+			}
+			averageScore = averageScore/count;
+		} else {
+			averageScore = 0;
+		}
 		
-		return 0; // this line is here only so this code will compile if you don't modify it
+		return averageScore;
 
 	}
 	
