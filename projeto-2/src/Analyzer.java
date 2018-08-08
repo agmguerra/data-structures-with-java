@@ -3,6 +3,7 @@ import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
@@ -20,7 +21,7 @@ public class Analyzer {
 	 */
 	public static List<Sentence> readFile(String filename) {
 
-		List<Sentence> list = new ArrayList<Sentence>();
+		List<Sentence> list = new LinkedList<Sentence>();
 		
 		try (BufferedReader br = new BufferedReader(new FileReader(filename))) {
 		    String line;
@@ -51,7 +52,7 @@ public class Analyzer {
 	
 	private static List<String> splitSentenceIntoWords(String sentence) {
 		
-		List<String> sentenceParsed = new ArrayList<String>();
+		List<String> sentenceParsed = new LinkedList<String>();
 		if (sentence != null && !sentence.isEmpty()) {
 			String[] textParts = sentence.split("\\s{1}");
 			for (String part : textParts) {
