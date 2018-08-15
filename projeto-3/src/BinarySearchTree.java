@@ -1,4 +1,3 @@
-
 public class BinarySearchTree<E extends Comparable<E>> {
 	class Node {
 		E value;
@@ -114,7 +113,6 @@ public class BinarySearchTree<E extends Comparable<E>> {
 	 *********************************************/
 	
 	private Node findNode(Node n, E val) {
-		//Não existe ou o node passado é null
 		if (n == null) return null;
 		
 		if (n.value.equals(val)) {
@@ -166,7 +164,7 @@ public class BinarySearchTree<E extends Comparable<E>> {
 
 	
 //	// Method #2.
-//	//Implementation version 1 without recursion
+//	//Implementation without recursion
 //	protected int depth(E val) {
 //
 //		if (val == null) return -1;
@@ -195,49 +193,88 @@ public class BinarySearchTree<E extends Comparable<E>> {
 //	}
 	
 
-
-	public int calculateHeight(Node baseNode, Node n) {
-		int height = 0;
+	public int calculateHeight(Node n) {
 		if (n == null) return 0;
-		height =+ calculateHeight(baseNode, n.leftChild);
-		height =+ calculateHeight(baseNode, n.rightChild);
-		if (n == baseNode) {
-			return height;
+		
+		int height =+ calculateHeight(n.leftChild);
+		int leftHeight = height;
+		height = 0;
+		height =+ calculateHeight(n.rightChild);
+		if (leftHeight > height) {
+			height = leftHeight;
+		}
+		if (n.leftChild == null && n.rightChild == null) {
+			//leaf
+			height = 0;
+		} else {
+			height++;
 		}
 		return height;
 	}
 		
-	
-	// Method #3.
 	protected int height(E val) {
 
 		if (val == null) return -1;
 		
 		Node n = findNode(val);
 		if (n == null) return -1;
-		int height = calculateHeight(n, n);
+		return calculateHeight(n);
 		
-		return -2; // this line is here only so this code will compile if you don't modify it
 
 	}
 
 
 	// Method #4.
 	protected boolean isBalanced(Node n) {
-
-		/* IMPLEMENT THIS METHOD! */
 		
-		return true; // this line is here only so this code will compile if you don't modify it
+		if (n == null) return false;
+		
+		Node node = findNode(n.value);
+		if (node == null) return false;
 
+		if (node.leftChild == null && node.rightChild == null) {
+			return true;
+		}
+		
+		int leftHeight = calculateHeight(n.leftChild);
+		int rightHeight = calculateHeight(n.rightChild);
+		
+		int dif = Math.abs(leftHeight - rightHeight);
+		if (dif == 0) {
+			return true;
+		} else if (dif == 1) {
+			if (n.leftChild == null || n.rightChild == null) {
+				return false;
+			} else {
+				return true;
+			}
+		} else {
+			return false;
+		}
+				
+	
 	}
+	
+	boolean isNodeBalanced = false;
+	private void isNodeBalanced(Node n) {
+		if (n == null) return ;
+		isNodeBalanced(n.leftChild);
+		if (isBalanced(n)) {
+			isNodeBalanced = true;
+		} else {
+			isNodeBalanced = false;
+		}
+		if (isNodeBalanced) {
+			isNodeBalanced(n.rightChild);
+		}
+	}
+
 	
 	// Method #5. .
 	public boolean isBalanced() {
-
-		/* IMPLEMENT THIS METHOD! */
-		
-		return false; // this line is here only so this code will compile if you don't modify it
-
+		isNodeBalanced(root);
+		return isNodeBalanced;
 	}
+	
 
 }
