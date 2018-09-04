@@ -36,6 +36,7 @@ public class BreadthFirstSearch {
 		toExplore.add(start);
 		while (!toExplore.isEmpty()) {
 			Node current = toExplore.remove();
+
 			for (Node neighbor : graph.getNodeNeighbors(current)) {
 				if (!marked.contains(neighbor)) {
 					if (neighbor.getElement().equals(elementToFind)) {
