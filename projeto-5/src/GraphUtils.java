@@ -12,10 +12,29 @@ import java.util.Set;
 public class GraphUtils {
 
 	public static int minDistance(Graph graph, String src, String dest) {
-
-		/* IMPLEMENT THIS METHOD! */
 		
-		return -2; // this line is here only so this code will compile if you don't modify it
+		if (graph == null || graph.getAllNodes().isEmpty()) {
+			return -1;
+		}
+		
+		if (src == null || src.isEmpty()) {
+			return -1;
+		}
+		if (dest == null || dest.isEmpty()) {
+			return -1;
+		}
+		
+		if (!graph.containsElement(src) || !graph.containsElement(dest)) {
+			return -1;
+		}
+		
+		Node startNode = graph.getNode(src);
+		
+		BreadthFirstSearch bfs = new BreadthFirstSearch(graph);
+		int shortestPath = bfs.bfs(startNode, dest);
+		
+		
+		return shortestPath;
 	}
 	
 

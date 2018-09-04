@@ -23,12 +23,13 @@ public class BreadthFirstSearch {
 	/**
 	 * This method was discussed in the lesson
 	 */
-	public boolean bfs(Node start, String elementToFind) {
+	public int bfs(Node start, String elementToFind) {
+		int cont = 0;
 		if (!graph.containsNode(start)) {
-				return false;
+				return -1;
 		}
 		if (start.getElement().equals(elementToFind)) {
-			return true;
+			return cont;
 		}
 		Queue<Node> toExplore = new LinkedList<Node>();
 		marked.add(start);
@@ -38,14 +39,15 @@ public class BreadthFirstSearch {
 			for (Node neighbor : graph.getNodeNeighbors(current)) {
 				if (!marked.contains(neighbor)) {
 					if (neighbor.getElement().equals(elementToFind)) {
-						return true;
+						return cont;
 					}
 					marked.add(neighbor);
 					toExplore.add(neighbor);
 				}
 			}
+			
 		}
-		return false;
+		return -1;
 	}
 	
 
