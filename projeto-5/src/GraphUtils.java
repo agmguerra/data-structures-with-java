@@ -31,10 +31,12 @@ public class GraphUtils {
 		Node startNode = graph.getNode(src);
 		
 		BreadthFirstSearch bfs = new BreadthFirstSearch(graph);
-		int shortestPath = bfs.bfs(startNode, dest);
+		int result = bfs.bfs(startNode, dest);
 		
 		
-		return shortestPath;
+		
+		
+		return result;
 	}
 	
 

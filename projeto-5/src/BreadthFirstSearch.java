@@ -1,7 +1,9 @@
 
 
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
+import java.util.Map;
 import java.util.Queue;
 import java.util.Set;
 
@@ -24,23 +26,27 @@ public class BreadthFirstSearch {
 	 * This method was discussed in the lesson
 	 */
 	public int bfs(Node start, String elementToFind) {
-		int cont = 0;
+		
+		Map<Node, Node> result = new HashMap<>();
 		if (!graph.containsNode(start)) {
 				return -1;
 		}
 		if (start.getElement().equals(elementToFind)) {
-			return cont;
+			return 0;
 		}
 		Queue<Node> toExplore = new LinkedList<Node>();
 		marked.add(start);
 		toExplore.add(start);
+		result.put(start, null);
 		while (!toExplore.isEmpty()) {
 			Node current = toExplore.remove();
 
 			for (Node neighbor : graph.getNodeNeighbors(current)) {
 				if (!marked.contains(neighbor)) {
+					result.put(neighbor, current);
 					if (neighbor.getElement().equals(elementToFind)) {
-						return cont;
+						
+						return extractShortestPathLenght(neighbor, result);
 					}
 					marked.add(neighbor);
 					toExplore.add(neighbor);
@@ -49,6 +55,22 @@ public class BreadthFirstSearch {
 			
 		}
 		return -1;
+	}
+	
+	private int extractShortestPathLenght(Node elementFinded, Map<Node, Node> paths) {
+		boolean hasPath = false;
+		Node element = elementFinded;
+		int cont = 0;
+		while (!hasPath) {
+			Node a = paths.get(element);
+			if (a != null) {
+				cont++;
+				element = a;
+			} else {
+				hasPath = true;
+			}
+		}
+		return cont;
 	}
 	
 
