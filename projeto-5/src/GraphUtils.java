@@ -1,5 +1,6 @@
 
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -33,18 +34,39 @@ public class GraphUtils {
 		BreadthFirstSearch bfs = new BreadthFirstSearch(graph);
 		int result = bfs.bfs(startNode, dest);
 		
-		
-		
-		
 		return result;
 	}
 	
 
 	public static Set<String> nodesWithinDistance(Graph graph, String src, int distance) {
 
-		/* IMPLEMENT THIS METHOD! */
+		if (graph == null || graph.getAllNodes().isEmpty()) {
+			return null;
+		}
 		
-		return null; // this line is here only so this code will compile if you don't modify it
+		if (src == null || src.isEmpty()) {
+			return null;
+		}
+		
+		if (!graph.containsElement(src)) {
+			return null;
+		}
+		
+		if (distance < 1) {
+			return null;
+		}
+		
+		DepthFirstSearch dfs = new DepthFirstSearch(graph);
+		dfs.dfs(graph.getNode(src));	
+		List<List<Node>> saida = dfs.getPathList();
+		Set<String> result = new HashSet<String>();
+		saida.forEach(lista -> {
+			if (lista.size() <= distance) {
+				result.add(lista.get(lista.size() - 1).getElement());
+			}
+		});
+		
+		return result;
 	}
 
 
