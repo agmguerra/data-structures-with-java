@@ -61,7 +61,7 @@ public class GraphUtils {
 		List<List<Node>> saida = dfs.getPathList();
 		Set<String> result = new HashSet<String>();
 		saida.forEach(lista -> {
-			if (lista.size() <= distance) {
+			if (lista.size() - 1 <= distance) {
 				result.add(lista.get(lista.size() - 1).getElement());
 			}
 		});
