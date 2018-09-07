@@ -1,8 +1,6 @@
 
 
 import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Set;
 
 /*
@@ -12,56 +10,38 @@ import java.util.Set;
  */
 
 public class DepthFirstSearch {
-	protected Set<Node> marked;
+	protected Set<String> marked;
 	protected Graph graph;
-	//protected List<Node> path = new LinkedList<Node>();
-	protected List<Node> path = new LinkedList<Node>();
-	protected List<List<Node>> pathList = new LinkedList<List<Node>>();
 	protected Node init;
+	protected int cont = 0;
 
 
 	
 	public DepthFirstSearch(Graph graphToSearch) {
-		marked = new HashSet<Node>();
+		marked = new HashSet<String>();
 		graph = graphToSearch;
 	}
 	
-	public void dfs(Node start) {
+	
+	public void nodesWithinDistance(Node start, int distance) {
 		if (!graph.containsNode(start)) {
-			return;
+			return ;
 		}	
 	
-		marked.add(start);
-		path.add(start);
-		pathList.add(new LinkedList<>(path));
-		Set<Node> aux = graph.getNodeNeighbors(start);
-		if (graph.getNodeNeighbors(start).isEmpty()) {
-			path.remove(start);
-		} else {
+		cont++;
+		if ((cont - 1) <= distance) {
+			if (!marked.contains(start.getElement())) {
+				marked.add(start.getElement());
+			}
 			for (Node neighbor : graph.getNodeNeighbors(start)) {
-				if (!marked.contains(neighbor)) { 
-				    dfs(neighbor);
-				}
-				
+				nodesWithinDistance(neighbor, distance);	
+				cont--;
 			}
 		}
+		
 	}
-	
-	
-	public List<List<Node>> getPathList() {
-		return pathList;
-	}
-	
-	public static void main(String[] args) {
 		
-		Graph grafo = GraphBuilder.buildUndirectedGraph("graph_builder_test.txt");
-			
-		//Graph grafo = GraphBuilder.buildDirectedGraph("graph_builder_test.txt");
-		
-		DepthFirstSearch dfs = new DepthFirstSearch(grafo);
-		dfs.dfs(grafo.getNode("1"));
-		
-		List<List<Node>> saida = dfs.getPathList();
-		saida.forEach(r -> System.out.println(r));
+	public Set<String> getResult() {
+		return marked;
 	}
 }

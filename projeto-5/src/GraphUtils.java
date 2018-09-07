@@ -1,6 +1,5 @@
 
 
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -32,7 +31,7 @@ public class GraphUtils {
 		Node startNode = graph.getNode(src);
 		
 		BreadthFirstSearch bfs = new BreadthFirstSearch(graph);
-		int result = bfs.bfs(startNode, dest);
+		int result = bfs.minDistance(startNode, dest);
 		
 		return result;
 	}
@@ -57,16 +56,11 @@ public class GraphUtils {
 		}
 		
 		DepthFirstSearch dfs = new DepthFirstSearch(graph);
-		dfs.dfs(graph.getNode(src));	
-		List<List<Node>> saida = dfs.getPathList();
-		Set<String> result = new HashSet<String>();
-		saida.forEach(lista -> {
-			if (lista.size() - 1 <= distance) {
-				result.add(lista.get(lista.size() - 1).getElement());
-			}
-		});
+		dfs.nodesWithinDistance(graph.getNode(src), distance);	
+		Set<String> lista = dfs.getResult();
+		lista.remove(graph.getNode(src).getElement()); 
 		
-		return result;
+		return lista;
 	}
 
 

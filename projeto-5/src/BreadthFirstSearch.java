@@ -25,7 +25,7 @@ public class BreadthFirstSearch {
 	/**
 	 * This method was discussed in the lesson
 	 */
-	public int bfs(Node start, String elementToFind) {
+	public int minDistance(Node start, String elementToFind) {
 		
 		Map<Node, Node> result = new HashMap<>();
 		if (!graph.containsNode(start)) {
