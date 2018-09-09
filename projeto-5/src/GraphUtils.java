@@ -1,5 +1,6 @@
 
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -66,9 +67,41 @@ public class GraphUtils {
 
 	public static boolean isHamiltonianPath(Graph g, List<String> values) {
 
-		/* IMPLEMENT THIS METHOD! */
+		Set<Node> marked = new HashSet<>();
+		if (g == null || g.getAllNodes().isEmpty()) {
+			return false;
+		}
 		
-		return true; // this line is here only so this code will compile if you don't modify it
+		if (values == null || values.isEmpty()) {
+			return false;
+		}
+		
+		//verifying if is a cicle
+		if (!values.get(0).equals(values.get(values.size() - 1))) {
+			return false;
+		}
+		
+		Node visitedBefore = null;
+		for (String element : values) {
+			
+			if (!g.containsElement(element)) { //is not a node
+				return false;
+			}
+			Node visited = g.getNode(element);
+			if (marked.contains(visited) && !g.getNode(element).getElement().equals(values.get(0))) { //Visited twice
+				return false;  
+			}
+			if (visitedBefore != null) {
+				if (!g.getNodeNeighbors(visitedBefore).contains(visited)) { //desconected
+					return false;
+				}
+			}
+			marked.add(g.getNode(element));
+			visitedBefore = g.getNode(element);
+			
+		}
+		
+		return marked.size() == g.numNodes; 
 	}
 	
 }
