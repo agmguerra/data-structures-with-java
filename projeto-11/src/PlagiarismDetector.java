@@ -1,18 +1,14 @@
 
 
 import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Scanner;
 import java.util.Set;
-import java.util.TreeMap;
 
 /*
  * SD2x Homework #11
@@ -27,7 +23,7 @@ public class PlagiarismDetector {
 		File dirFile = new File(dirName);
 		String[] files = dirFile.list();
 		
-		Map<String, Integer> numberOfMatches = new TreeMap<String, Integer>();
+		Map<String, Integer> numberOfMatches = new LinkedHashMap<String, Integer>();
 		
 		//Implementing a cache for the files
 		Map<String, Set<String>> fileCache = new HashMap<String, Set<String>>();
@@ -68,10 +64,11 @@ public class PlagiarismDetector {
 			
 		}		
 		
-		return numberOfMatches; //sortResults(numberOfMatches);
+		return sortResults(numberOfMatches);
 
 	}
 
+	
 	
 	/*
 	 * This method reads the given file and then converts it into a Collection of Strings.
@@ -82,23 +79,19 @@ public class PlagiarismDetector {
 		
 		List<String> words = new LinkedList<String>();
 		
-		Path file = Paths.get(filename);
 		try {
-			List<String> lines = Files.readAllLines(file);
-			
-			for (String line : lines) {
-				words.add(line.replaceAll("[^a-zA-Z]", "").toUpperCase());	
+			Scanner in = new Scanner(new File(filename));
+			while (in.hasNext()) {
+				words.add(in.next().replaceAll("[^a-zA-Z]", "").toUpperCase());
 			}
-			
-		} catch (IOException e) {
+		}
+		catch (Exception e) {
 			e.printStackTrace();
 			return null;
 		}
-
 		
 		return words;
 	}
-
 	
 	/*
 	 * This method reads a file and converts it into a Set/List of distinct phrases,
@@ -157,11 +150,8 @@ public class PlagiarismDetector {
 		// Because this approach modifies the Map as a side effect of printing 
 		// the results, it is necessary to make a copy of the original Map
 		Map<String, Integer> copy = new HashMap<String, Integer>();
-
-		for (String key : possibleMatches.keySet()) {
-			copy.put(key, possibleMatches.get(key));
-		}	
 		
+		copy.putAll(possibleMatches);
 		
 		LinkedHashMap<String, Integer> list = new LinkedHashMap<String, Integer>();
 
